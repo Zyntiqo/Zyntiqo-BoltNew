@@ -36,9 +36,10 @@ export default function AssistantPage() {
 
     try {
       const result = await callAI({
-        task: 'recommend',
+        task: 'chat',
         context: { question: text },
         prompt: text,
+        history: messages.map((m) => ({ role: m.role, content: m.content })),
       });
 
       if (result.ok) {

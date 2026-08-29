@@ -1,4 +1,5 @@
 import { siteConfig } from '../config';
+import { supabase } from '../supabase';
 
 /**
  * AI service abstraction for Zyntiqo Pro.
@@ -34,16 +35,23 @@ export async function callAI(req: AIRequest): Promise<AIResult> {
 
   try {
     const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assistant`;
+
+    // Pass the current user's access token so the edge function can scope
+    // data access by role. Falls back to anon key for unauthenticated users.
+    const { data: session } = await supabase.auth.getSession();
+    const authToken = session?.session?.access_token ?? import.meta.env.VITE_SUPABASE_ANON_KEY;
+
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify(req),
     });
     if (!res.ok) {
-      return { ok: false, reason: 'error', message: `AI service error (${res.status})` };
+      const body = await res.json().catch(() => ({}));
+      return { ok: false, reason: 'error', message: body?.error ?? `AI service error (${res.status})` };
     }
     const data = await res.json();
     if (!data?.content) {
