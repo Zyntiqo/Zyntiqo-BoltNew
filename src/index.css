@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-ink-950 text-ink-100 font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 15% -10%, rgba(34, 211, 238, 0.08), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(16, 185, 129, 0.06), transparent 40%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-brand-500/30 text-white;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-display tracking-tight;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-ink-950;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-600;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-300 via-brand-400 to-accent-400 bg-clip-text text-transparent;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border border-white/5 bg-ink-850/60 backdrop-blur-sm;
+  }
+
+  .glass-nav {
+    @apply border-b border-white/5 bg-ink-950/70 backdrop-blur-xl;
+  }
+
+  .ecosystem-center {
+    animation: ecosystem-breathe 5s ease-in-out infinite;
+  }
+
+  .ecosystem-line {
+    animation: ecosystem-flow 4s linear infinite;
+    transition: opacity 300ms ease, stroke-width 300ms ease;
+  }
+
+  .ecosystem-line.is-active {
+    opacity: 1;
+    stroke-width: 0.65;
+  }
+
+  .ecosystem-node {
+    animation: ecosystem-float 5.5s ease-in-out infinite;
+    transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+  }
+
+  .ecosystem-node.is-active {
+    transform: scale(1.08);
+    border-color: rgba(34, 211, 238, 0.45);
+    background-color: rgba(17, 26, 43, 0.95);
+    box-shadow: 0 0 24px -8px rgba(34, 211, 238, 0.7);
+  }
+}
+
+@keyframes ecosystem-breathe {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.18)); }
+  50% { transform: scale(1.025); filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.3)); }
+}
+
+@keyframes ecosystem-flow {
+  to { stroke-dashoffset: -5; }
+}
+
+@keyframes ecosystem-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecosystem-center,
+  .ecosystem-line,
+  .ecosystem-node {
+    animation: none;
+  }
+
+  .ecosystem-node,
+  .ecosystem-node.is-active {
+    transform: none;
+    transition: none;
+  }
+
+  .ecosystem-center .animate-pulse-ring {
+    animation: none;
+  }
+}
+
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}

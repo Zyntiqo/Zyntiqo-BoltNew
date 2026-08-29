@@ -1,0 +1,5 @@
+[functions.send-email]
+verify_jwt = false
+
+[functions.run-automation]
+verify_jwt = false
